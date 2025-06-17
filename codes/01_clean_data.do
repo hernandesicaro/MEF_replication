@@ -10,16 +10,16 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
 * Note 1 : The descriptions will be more detailed
 * for the first year - which is 2018. This is due
 * to the fact that the cleaning process is basically
-* the same for all years. I'll describe the steps
+* the same for all years. We will describe the steps
 * more carefully for the year of 2018 and the pattern
 * remains for the following years.
 ****************************************************
 
 *******************************************************
-* Note 2 : I decided to clean each year individually
+* Note 2 : We decided to clean each year individually
 * and not make it a loop given the uncertainty of
 * uniformity across years. This may not be optimal
-* but in turn makes the cleaning process more reliable   
+* but in turn makes the cleaning process more reliable.   
 *******************************************************
 
 /*------------------------------- 2018 ---------------------------------------*/
@@ -29,7 +29,7 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
 **************************************************
 import delim using "raw_data/GERACAO_USINA_2018.csv", clear
 
-**************************************************
+*****************************************************
 * STEP 2: Drop observations: Here I am dropping
 * all the non-generating plants or those which
 * have null values. I can do this given that
@@ -37,15 +37,15 @@ import delim using "raw_data/GERACAO_USINA_2018.csv", clear
 * generation - meaning that we do not lose the time
 * series proporties for the regressions that will be
 * done
-**************************************************
+*****************************************************
 
 drop if val_geracao == 0
 drop if val_geracao ==.
 
 **************************************************
 * STEP 3: Dropping the names of states and zones.
-* To save computational efforts we can work with 
-* only the simple identificators for those
+* since we already have their indicators in the 
+* dataset
 **************************************************
 
 drop nom_subsistema nom_estado 
@@ -129,10 +129,11 @@ import delim using "raw_data/GERACAO_USINA_2020.csv", clear
 
 drop if val_geracao == 0
 drop if val_geracao ==.
-
-/*Note that starting from 2020 and onwards, I am also 
-dropping the id_ons - which is a identificator which
-will not be of any use for us*/
+**************************************************
+* Note that starting from 2020 and onwards, I am also 
+* dropping the id_ons - which is a identificator which
+* will not be of any use for us
+**************************************************
 drop nom_subsistema id_ons nom_estado 
 
 replace ceg = subinstr(ceg, ".", "",.)
@@ -195,10 +196,11 @@ save "clean_data/generation_21.dta"
 /*------------------------------- 2022 ---------------------------------------*/
 
 *******************************************************
-* Note 3 : For 2022 and subsequent years I'll generate
+* Note 3 : For 2022 and subsequent years We'll generate
 * an auxiliary file when cleaning. Due to the fact that 
-* the generation data comes for each month. I first drop 
-* the variables and observations and then I append to the
+* the generation data comes for each month separately. 
+* We first drop 
+* the variables and observations and then we append to the
 * final file. This intermediary file is erased.
 *******************************************************
 
