@@ -795,5 +795,49 @@ la var hour_emission "Unadjusted Emissions"
 
 save "clean_data\23_24_thermal.dta"
 
+****************************************************
+* STEP : And now we perform the regression in a loop
+* for all couple of years
+****************************************************
+
+forvalues i = 18/23{
+
+use "clean_data/`i'_`=`i'+1'_overall.dta"
+
+levelsof zone, local(levels)
+foreach l of local levels{	
+	preserve
+	keep if zone == "`l'"
+	sort full_date
+	gen gen_lag = season_generation[_n-1]
+	gen emission_lag = season_emission[_n-1]
+	gen delta_emission = season_emission - emission_lag
+	gen delta_gen_`l' = season_generation - gen_lag
+	eststo: reg delta_emission delta_gen
+	restore
+}
+
+use "clean_data/`i'_`=`i'+1'_thermal.dta"
+
+levelsof zone, local(levels)
+foreach l of local levels{	
+	preserve
+	keep if zone == "`l'"
+	sort full_date
+	gen gen_lag = season_generation[_n-1]
+	gen emission_lag = season_emission[_n-1]
+	gen delta_emission = season_emission - emission_lag
+	gen delta_gen_thermal_`l' = season_generation - gen_lag
+	eststo: reg delta_emission delta_gen
+	restore
+}
+
+esttab using "regression_results/ap_2_mar/`i'_`=`i'+1'.tex", nonumber	
+
+eststo clear	
+}
+
+
+
 
 
