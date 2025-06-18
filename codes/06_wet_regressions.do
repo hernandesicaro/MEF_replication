@@ -2,25 +2,27 @@
 REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
  HIGH PENETRATION OF RENEWABLES: THE CASE OF BRAZIL
  
- FILE: WET REGRESSIONS
+ FILE: HUMID REGRESSIONS
 ##############################################################################*/
 
-cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
 
-**************************************************
-* Note 1: This script is segmented into all regressions
-* for the dry analysis and then another chunk for the
-* we analysis
-**************************************************
+********************************************************
+* Note 1: In this script we run the regressions 
+* similarly as the previous script. However we subset observations
+* just for the HUMID season in Brazil
 
-
-/*------------------------------- 2018---------------------------------------*/
-
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
+* The outcomes of this script is those of table 7
+* in the paper
+********************************************************
 
 
+********************************************************
+* Note 2: This script is very similar to that for the
+* arid regressions - the only difference is the 
+* time frame in which the observations are subset
+********************************************************
+
+/*------------------------------ 2018 Overall --------------------------------*/
 
 use "clean_data/emissions_18.dta", clear
 
@@ -74,8 +76,8 @@ la var hour_emission "Unadjusted Emissions"
 gen estacao = "dry" if date >= td(01/04/2018) & date <= td(30/09/2018)
 replace estacao = "wet" if estacao == ""
 
-
-keep if estacao == "wet"
+* Here is the difference of the subsetting when subsetting the observations
+* now we are interested in the estimates regarding the humid season in brazil
 
 levelsof zone, local(levels)
 foreach l of local levels{	
@@ -92,10 +94,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2018/2018_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2018
-**************************************************
-
+/*------------------------------ 2018 Thermal --------------------------------*/
 
 use "clean_data/emissions_18.dta", clear
 
@@ -169,12 +168,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2018/2018_thermal_wet.tex", nocons
 
-/*------------------------------- 2019 ---------------------------------------*/
-
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
-
+/*------------------------------ 2019 Overall --------------------------------*/
 use "clean_data/emissions_19.dta", clear
 
 collapse (sum) hour_gen hour_emission, by(hour zone)
@@ -245,9 +239,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2019/2019_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2019
-**************************************************
+/*------------------------------ 2019 Thermal --------------------------------*/
 
 
 use "clean_data/emissions_19.dta", clear
@@ -323,11 +315,7 @@ foreach l of local levels{
 esttab using "regression_results/2019/2019_thermal_wet.tex", nocons
 
 
-/*------------------------------- 2020 ---------------------------------------*/
-
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
+/*------------------------------ 2020 Overall --------------------------------*/
 
 use "clean_data/emissions_20.dta", clear
 
@@ -399,11 +387,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2020/2020_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2020
-**************************************************
-
-
+/*------------------------------ 2020 Thermal --------------------------------*/
 use "clean_data/emissions_20.dta", clear
 
 drop if hour_emission == 0
@@ -477,11 +461,7 @@ foreach l of local levels{
 esttab using "regression_results/2020/2020_thermal_wet.tex", nocons
 
 
-/*------------------------------- 2021---------------------------------------*/
-
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
+/*------------------------------ 2021 Overall --------------------------------*/
 
 use "clean_data/emissions_21.dta", clear
 
@@ -553,9 +533,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2021/2021_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2021
-**************************************************
+/*------------------------------ 2021 Thermal --------------------------------*/
 
 
 use "clean_data/emissions_21.dta", clear
@@ -630,11 +608,8 @@ foreach l of local levels{
 
 esttab using "regression_results/2021/2021_thermal_wet.tex", nocons
 
-/*------------------------------- 2022 ---------------------------------------*/
+/*------------------------------ 2022 Overall --------------------------------*/
 
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
 
 use "clean_data/emissions_22.dta", clear
 
@@ -706,11 +681,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2022/2022_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2022
-**************************************************
-
-
+/*------------------------------ 2022 Thermal --------------------------------*/
 use "clean_data/emissions_22.dta", clear
 
 drop if hour_emission == 0
@@ -784,11 +755,7 @@ foreach l of local levels{
 esttab using "regression_results/2022/2022_thermal_wet.tex", nocons
 
 
-/*------------------------------- 2023 ---------------------------------------*/
-
-**************************************************
-* STEP 1: Deseasonalize data
-**************************************************
+/*------------------------------ 2023 Overall --------------------------------*/
 
 use "clean_data/emissions_23.dta", clear
 
@@ -860,9 +827,7 @@ foreach l of local levels{
 
 esttab using "regression_results/2023/2023_overall_wet.tex", nocons
 
-**************************************************
-* STEP 2: Only thermals of 2023 dry
-**************************************************
+/*------------------------------ 2023 Thermal --------------------------------*/
 
 
 use "clean_data/emissions_23.dta", clear
