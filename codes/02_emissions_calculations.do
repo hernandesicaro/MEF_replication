@@ -6,9 +6,6 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
 ##############################################################################*/
 
 
-cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
-
-
 /*------------------------------- 2018 ---------------------------------------*/
 **************************************************
 * STEP 1: Load the generation data from prior 

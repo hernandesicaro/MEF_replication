@@ -5,7 +5,6 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
  FILE: REGRESSIONS
 ##############################################################################*/
 
-cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
 
 ****************************************************
 * Note 1 : These regressions regard the raw data i.e
