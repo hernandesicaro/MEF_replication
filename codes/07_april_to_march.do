@@ -5,15 +5,13 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
  FILE: APRIL TO MARCH REGRESSIONS
 ##############################################################################*/
 
-cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
-
 
 *******************************************************
 * Note 1 : In this set of regressions I'll save 
 * intermediary dta files with the time frames from
 * april of one year through march of the following
-* year. This is just so I can make the regressions
-* afterwards in a loop. I found it to be more tidy
+* year. This is just so we can make the regressions
+* afterwards in a loop. We found it to be more tidy
 * to make this way: first make interediary files
 * and then run all the regressions
 
@@ -23,11 +21,9 @@ cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
 
 *******************************************************
 * Note 2 : These intermediary files will be called
-* 18_19_overall.dta and 18_19_thermal.dta - for then
+* 18_19_overall.dta and 18_19_thermal.dta - for
 * total emission and generation, and only thermal emission
-* and generation respectively. I'll make it very clear
-* in the code what steps I am doing, and in the final
-* section the regressions which will be performed
+* and generation respectively.
 *******************************************************
 
 
@@ -35,14 +31,15 @@ cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
 /*----------------------------- 2018/2019 Overall ----------------------------*/
 
 ****************************************************
-* STEP 1: Appending the 2018 and 2019 datasets
+* STEP 1: Loading the 2018 dataset and then 
+* appending the 2019.
 ****************************************************
 
 use "clean_data/emissions_18.dta", clear
-
 append using "clean_data/emissions_19.dta"
 
 collapse (sum) hour_gen hour_emission, by(hour zone)
+
 ****************************************************
 * STEP 2: Deseasonalizing the series
 ****************************************************
@@ -59,9 +56,11 @@ drop date
 rename v2 date
 format date %td
 
+
+* Here we subset the time frame for april from one year 
+* to the march of the next
 keep if date >= td(01/04/2018) & date <=td(31/03/2019)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -115,7 +114,7 @@ save "clean_data\18_19_overall.dta"
 
 
 ****************************************************
-* STEP 1: Appending the 2018 and 2019 datasets
+* STEP 4: Appending the 2018 and 2019 datasets
 ****************************************************
 
 use "clean_data/emissions_18.dta", clear
@@ -142,7 +141,6 @@ format date %td
 
 keep if date >= td(01/04/2018) & date <=td(31/03/2019)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -202,7 +200,7 @@ format date %td
 
 keep if date >= td(01/04/2019) & date <=td(31/03/2020)
 
-/*gerando o dia da semana pra desazonalizar*/
+
 gen dow = dow(date)
 drop date
 
@@ -265,7 +263,6 @@ format date %td
 
 keep if date >= td(01/04/2019) & date <=td(31/03/2020)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -303,7 +300,6 @@ la var hour_emission "Unadjusted Emissions"
 save "clean_data\19_20_thermal.dta"
 
 /*----------------------------- 2020/2021 Overall ----------------------------*/
-
 
 use "clean_data/emissions_20.dta", clear
 
@@ -389,7 +385,6 @@ format date %td
 
 keep if date >= td(01/04/2020) & date <=td(31/03/2021)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -512,7 +507,6 @@ format date %td
 
 keep if date >= td(01/04/2021) & date <=td(31/03/2022)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -635,7 +629,6 @@ format date %td
 
 keep if date >= td(01/04/2022) & date <=td(31/03/2023)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -732,8 +725,9 @@ la var hour_gen "Unadjusted Generation"
 la var hour_emission "Unadjusted Emissions"
 
 save "clean_data\23_24_overall.dta"
-/*----------------------------- 2023/2024 Thermal ----------------------------*/
 
+
+/*----------------------------- 2023/2024 Thermal ----------------------------*/
 
 use "clean_data/emissions_23.dta", clear
 
@@ -758,7 +752,6 @@ format date %td
 
 keep if date >= td(01/04/2023) & date <=td(31/03/2024)
 
-/*gerando o dia da semana pra desazonalizar*/
 gen dow = dow(date)
 drop date
 
@@ -795,10 +788,10 @@ la var hour_emission "Unadjusted Emissions"
 
 save "clean_data\23_24_thermal.dta"
 
-****************************************************
-* STEP : And now we perform the regression in a loop
-* for all couple of years
-****************************************************
+*******************************************************
+* STEP 5: And now we perform the regression in a loop
+* for all pairs of years - for both thermal and overall
+*******************************************************
 
 forvalues i = 18/23{
 
