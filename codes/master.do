@@ -1,12 +1,72 @@
-/*##############################################################################
-REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
- HIGH PENETRATION OF RENEWABLES: THE CASE OF BRAZIL
- 
- FILE: MASTER FILE
-##############################################################################*/
+*===============================================================================
+* MASTER DO-FILE
+* Replication package for the paper: Marginal Emissions Factors
+* in a Country with a High Penetration of Renewables: The case 
+* of Brazil
 
+* Author: Fulvio Fontini, Filippo Beltrami and Ícaro Franco Hernandes
+* Date: 25/06/2025
+* Purpose: Run all steps to replicate results
+* Stata Version used: 18
+*===============================================================================
 
 clear all
 set more off
 
-cd "`c(pwd)'" 
+cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF\run_test"  // <-- Change to your root folder
+
+**************************************************
+* STEP 1: Create the folders to store the
+* clean data and results
+**************************************************
+capture mkdir "clean_data"
+
+**************************************************
+* STEP 2 - MANUAL STEP: Put the file 
+* taxas_full.dta in the clean_data folder. This
+* file is described in greater deatil in the 
+* readme file
+**************************************************
+
+capture confirm file "clean_data/taxas_full.dta"
+if _rc {
+    di as error "--------------------------------------------------"
+    di as error "ERROR: Required file 'taxas_full.dta' not found."
+    di as error "Please follow the instructions in the README file to create it."
+    di as error "--------------------------------------------------"
+    exit 1
+}
+
+* Continue to create the folders
+capture mkdir "regression_results"
+forvalues year = 2018/2024 {
+    capture mkdir "regression_results/`year'"
+}
+
+capture mkdir "regression_results/ap_2_mar"
+
+**************************************************
+* Note 1: The raw data folder and the files
+* within is provided so we dont have to create it
+
+*The link to download it is in the readme file 
+**************************************************
+
+
+*----------------------------------------------------------
+* Step-by-step execution
+*----------------------------------------------------------
+
+do "01_clean_data.do" // 4 minutes
+do "02_emissions_calculations.do"
+do "03_regressions.do"
+do "04_deseason_regressions.do"
+do "05_dry_regressions.do"
+do "06_wet_regressions.do"
+do "07_april_to_march.do"
+do "08_tests.do"
+
+*----------------------------------------------------------
+* Done
+*----------------------------------------------------------
+di as result "Replication complete!"

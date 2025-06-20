@@ -5,7 +5,6 @@ REPLICATION PACKAGE FOR THE PAPER MARGINAL EMISSIONS FACTORS IN A COUNTRY WITH
  FILE: DESEASONALIZED REGRESSIONS
 ##############################################################################*/
 
-cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF"
 
 *******************************************************
 * Note 1 : In this file we are running the regressions
@@ -890,7 +889,7 @@ foreach l of local levels{
 
 esttab using "regression_results\2024\season_overall_24.tex"
 
-/*------------------------------- 2024 Thermal -------------------------------*/
+
 use "clean_data\emissions_24.dta", clear
 
 drop if hour_emission == 0
