@@ -21,23 +21,7 @@ cd "C:\Users\icaro\OneDrive\Área de Trabalho\replication package - MEF\run_test
 **************************************************
 capture mkdir "clean_data"
 
-**************************************************
-* STEP 2 - MANUAL STEP: Put the file 
-* taxas_full.dta in the clean_data folder. This
-* file is described in greater deatil in the 
-* readme file
-**************************************************
 
-capture confirm file "clean_data/taxas_full.dta"
-if _rc {
-    di as error "--------------------------------------------------"
-    di as error "ERROR: Required file 'taxas_full.dta' not found."
-    di as error "Please follow the instructions in the README file to create it."
-    di as error "--------------------------------------------------"
-    exit 1
-}
-
-* Continue to create the folders
 capture mkdir "regression_results"
 forvalues year = 2018/2024 {
     capture mkdir "regression_results/`year'"
@@ -57,7 +41,7 @@ capture mkdir "regression_results/ap_2_mar"
 * Step-by-step execution
 *----------------------------------------------------------
 
-do "01_clean_data.do" // 4 minutes
+do "01_clean_data.do" 
 do "02_emissions_calculations.do"
 do "03_regressions.do"
 do "04_deseason_regressions.do"
